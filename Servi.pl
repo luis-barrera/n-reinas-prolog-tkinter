@@ -4,7 +4,7 @@
 
 :- use_module(library(socket)).
 
-:- consult(metro).
+:- consult(reinas).
 
 servidor:-
     tcp_socket(Socket), 
@@ -29,14 +29,17 @@ process_client(Socket, Peer) :-
             doService(StreamPair),
             close(StreamPair)).
 
-%%% Lo de las listas
+%% Reinas
 doService(Stream):-
     % Manda Varias cadenas
     repeat,
-    % Antes era member(X, [hola,esta,es,una,prueba,fin]),
-    read(Stream,L),read(Stream,E),
-    (member(E,L), write(Stream, yes), put(Stream, 13), put(Stream, 10);
-     not(member(E,L)),write(Stream, no), put(Stream, 13), put(Stream, 10)),
+    %% N - numero de reinas, L - lista de soluciones
+    read(Stream, N),
+    %% read(Stream, L),
+    %% (reinas(N, L), write(Stream, L), nl;
+    %%  write(Stream, no)),
+    %% reinas(N, L), write(Stream, L), write(Stream, 13),
+    reinas(N, L), writeln(Stream, L),
     flush_output(Stream),
     E==fin, % Aca terminas
     !,
@@ -58,6 +61,18 @@ doService(Stream):-
 %%     !,
 %%     write(' Adios '), nl.
 
+%%% Lo de las listas
+%% doService(Stream):-
+%%     % Manda Varias cadenas
+%%     repeat,
+%%     % Antes era member(X, [hola,esta,es,una,prueba,fin]),
+%%     read(Stream,L),read(Stream,E),
+%%     (member(E,L), write(Stream, yes), put(Stream, 13), put(Stream, 10);
+%%      not(member(E,L)),write(Stream, no), put(Stream, 13), put(Stream, 10)),
+%%     flush_output(Stream),
+%%     E==fin, % Aca terminas
+%%     !,
+%%     write(' Adios '), nl.
 
 member(X, [X|Xs]).
 member(X, [Y|Ys]):-member(X,Ys).

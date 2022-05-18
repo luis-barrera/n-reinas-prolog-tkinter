@@ -22,12 +22,11 @@ t2.grid(row=1, column=1)
 
 def imp(event):
     print('Di click al botón')
-    lista = t1.get()
-    elem = t2.get()
-    print(f'Busca {elem} en {lista}')
-    res = prolog.query(lista, elem)
+    reinas = t1.get()
+    # print(f'Busca {elem} en {lista}')
+    res = prolog.query(reinas)
     l_res = tk.Label(text=f'La respuesta fue {res}')
-    l_res.grid(row=2, column=2)
+    l_res.grid(row=2, column=1)
 
 
 ok.bind('<Button-1>', imp)

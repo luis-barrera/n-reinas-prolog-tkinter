@@ -13,13 +13,11 @@ ctx.scale(WIDTH, HEIGHT)  # Normalizing the canvas
 # TODO: poner las casillas con etiquetas a la izq y en la parte inferior
 tam_cuadrado = 1 / (CASILLAS + 1)
 
-# Contadors de casillas
-casillas_counter = 0
-
 for row in range(CASILLAS):
     pos_row = row * tam_cuadrado
 
     # TODO: agregar etiquetas a las col(abc...) y rows(123...)
+    # Contadors de casillas
     casillas_counter = row % 2
 
     for col in range(CASILLAS):

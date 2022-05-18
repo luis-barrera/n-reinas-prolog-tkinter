@@ -29,12 +29,12 @@ class Conecta():
         self.s.connect((remote_ip, self.port))
 
     # TODO:
-    def query(self, lista, elem):
+    def query(self, reinas):
         # Haciendo una query ¿pertenece 3 a la lista [2,3,4,5]
         # Pide los datos
         # elem = ''
 
-        query = bytes(f'{lista}.\n{elem}.\n', 'ascii')  # dos lineas
+        query = bytes(f'{reinas}.\n', 'ascii')  # dos lineas
 
         try:
             self.s.sendall(query)
