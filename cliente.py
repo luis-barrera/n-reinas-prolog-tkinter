@@ -1,8 +1,10 @@
+# Correr el servidor de swipl con el comando
+# swipl -l Servi.pl -g true -g servidor
+
 # Cliente el servidor de Prolog
 import socket
 import sys
 import ast
-
 
 class Conecta():
     host = 'localhost'
