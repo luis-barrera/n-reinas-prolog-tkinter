@@ -1,6 +1,7 @@
 # Cliente el servidor de Prolog
 import socket
 import sys
+import ast
 
 
 class Conecta():
@@ -30,47 +31,37 @@ class Conecta():
 
     # TODO:
     def query(self, reinas):
-        # Haciendo una query ¿pertenece 3 a la lista [2,3,4,5]
-        # Pide los datos
-        # elem = ''
+        if (reinas == "" or reinas == "3" or reinas == "2" or int(reinas) <= 0):
+            # self.s.close()
+            return []
 
         query = bytes(f'{reinas}.\n', 'ascii')  # dos lineas
+
+        # try:
+        #     self.s.sendall(b'1.\n')
+        # except socket.error:
+        #     print('Error de comunicacion')
+
+        # self.s.recv(8192)
 
         try:
             self.s.sendall(query)
         except socket.error:
             print('Error de comunicacion')
 
-        reply = self.s.recv(256)
-        print(reply)
-        return reply
+        reply = self.s.recv(16384)
+        # print(reply.decode())
 
-        # Lo de las listas
-        # while elem != 'fin':
-        #     # lista = input('Dame la lista:')
-        #     # elem = input('Dame el elemento:')
+        try:
+            # print(ast.literal_eval(reply.decode()))
+            return ast.literal_eval(reply.decode())
+        except:
+            # print("No se hizo el parser")
+            return []
 
-        #     query = bytes(f'{lista}.\n{elem}.\n', 'ascii')  # dos lineas
 
-        #     try:
-        #         self.s.sendall(query)
-        #     except socket.error:
-        #         print('Error de comunicacion')
+coneccion = Conecta()
 
-        #     reply = self.s.recv(256)
-        #     print(reply)
-
-        # Lo del metro
-        # while elem != 'fin':
-        #     elem = input('Dame la estacion:')
-        #     query = bytes(f'{elem}.\n', 'ascii')
-
-        #     try:
-        #         self.s.sendall(query)
-        #     except socket.error:
-        #         print('Error de comunicacion')
-
-        #     reply = self.s.recv(512)
-        #     print(reply)
-
-        self.s.close()
+while (True):
+    reinas = input("Numero de reinas ")
+    print(coneccion.query(reinas))
