@@ -1,27 +1,32 @@
-# Correr el servidor de swipl con el comando
+# Para correr esta aplicación:
+# Primero: Correr el servidor de swipl con el comando:
 # swipl -l Servi.pl -g true -g servidor
+# Luego ejecutar la gui:
+# python GUIClase.py
 
 # Cliente el servidor de Prolog
-import socket
-import sys
-import ast
+import socket  # Librería para conectarse al server
+import sys     # Interactuar con el sistema
+import ast     # Compilar string a lista
 
 
 class Conecta():
+    # Dirección del servidor de prolog
     host = 'localhost'
+    # Puerto del servidor de prolog
     port = 50000
+    # Creamos un socket para leer el stack
     s: socket.socket
 
     def __init__(self):
         # Crea socket
-        print('Creando socket')
         try:
             self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         except socket.error:
             print('Error al crear el socket')
             sys.exit()
 
-        print('Obteniendo dir ip')
+        # Obtener las dirección del socket
         try:
             remote_ip = socket.gethostbyname(self.host)
         except socket.gaierror:
@@ -32,39 +37,26 @@ class Conecta():
         print(f'Conectandose al servidor {self.host} en el puerto {self.port}')
         self.s.connect((remote_ip, self.port))
 
-    # TODO:
+    # Función que le manda un string al socket de prolog y obtiene una solución
     def query(self, reinas):
-        if (reinas == "" or reinas == "3" or reinas == "2" or int(reinas) <= 0):
-            # self.s.close()
-            return []
+        # Mandamos una petición al servidor
+        # Esta petición contiene el número de reinas, un punto y el char enter
+        # Convertimos este string es bytes, para que pueda ser
+        #   interpretado por el socket
+        query = bytes(f'{reinas}.\n', 'ascii')
 
-        query = bytes(f'{reinas}.\n', 'ascii')  # dos lineas
-
-        # try:
-        #     self.s.sendall(b'1.\n')
-        # except socket.error:
-        #     print('Error de comunicacion')
-
-        # self.s.recv(8192)
-
+        # Envia la petición al servidor
         try:
             self.s.sendall(query)
         except socket.error:
             print('Error de comunicacion')
 
+        # Leemos la respuesta que mandó el servidor en el socket
         reply = self.s.recv(16384)
-        # print(reply.decode())
 
+        # La respuesta viene en formato de bytes, tratamos de
+        #   convertirla a una lista de números
         try:
-            # print(ast.literal_eval(reply.decode()))
             return ast.literal_eval(reply.decode())
-        except:
-            # print("No se hizo el parser")
+        except SyntaxError:
             return []
-
-
-# coneccion = Conecta()
-
-# while (True):
-#     reinas = input("Numero de reinas ")
-#     print(coneccion.query(reinas))
