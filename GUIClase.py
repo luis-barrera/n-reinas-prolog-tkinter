@@ -1,35 +1,57 @@
 import tkinter as tk
+from PIL import Image, ImageTk
+import os
+import time
+
 import cliente as con
+import draw_sol
 
 prolog = con.Conecta()
+Tablero = draw_sol.Tablero()
 
-e1: tk.Entry
-e2: tk.Entry
-
-ven = tk.Tk(className="Interfaz Gráfica")
+ven = tk.Tk(className="Problemas de las N Reinas")
 ven.geometry("600x400+100+100")
 
-ok = tk.Button(ven, text='OK')
-ok.place(x=100, y=100)
 
-tk.Label(ven, text="Lista").grid(row=0)
-t1 = tk.Entry(ven)
-t1.grid(row=0, column=1)
-tk.Label(ven, text="Elemento").grid(row=1)
-t2 = tk.Entry(ven)
-t2.grid(row=1, column=1)
-
-
-def imp(event):
+def imp():
     print('Di click al botón')
+
+    try:
+        os.remove("chess.png")
+    except FileNotFoundError:
+        print("No existe el archivo chess.png")
+
     reinas = t1.get()
-    # print(f'Busca {elem} en {lista}')
     res = prolog.query(reinas)
-    l_res = tk.Label(text=f'La respuesta fue {res}')
-    l_res.grid(row=2, column=1)
+
+    print("Generando solución")
+    Tablero.getImage(reinas, res)
+
+    while True:
+        try:
+            with open("chess.png", 'rb') as _:
+                break
+        except IOError:
+            time.sleep(3)
+            print(".", end="")
+
+    tablero = Image.open("chess.png")
+    sol = ImageTk.PhotoImage(tablero)
+    label_sol = tk.Label(image=sol)
+    label_sol.image = sol
+    label_sol.grid(row=3, column=0)
 
 
-ok.bind('<Button-1>', imp)
+frame1 = tk.Frame(ven, padx=10, pady=10)
+frame1.grid()
+tk.Label(frame1, text="Número de Reinas").grid(row=0, column=0)
+t1 = tk.Entry(frame1)
+t1.grid(row=0, column=1)
+ok = tk.Button(frame1, text='Mostrar Solución', command=imp).grid(row=0, column=2)
+for child in frame1.winfo_children():
+    child.grid_configure(padx=10, pady=10)
+# ok = tk.Button(frame1, text='Mostrar Solución', command=imp()).grid(row=0, column=2)
+
 
 
 def cierra():
@@ -39,5 +61,5 @@ def cierra():
 
 ven.protocol('WM_DELETE_WINDOW', cierra)
 
-ven.tk.call('tk', 'scaling', 4.0)
+# ven.tk.call('tk', 'scaling', 4.0)
 ven.mainloop()

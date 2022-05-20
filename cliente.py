@@ -6,6 +6,7 @@ import socket
 import sys
 import ast
 
+
 class Conecta():
     host = 'localhost'
     port = 50000
@@ -62,8 +63,8 @@ class Conecta():
             return []
 
 
-coneccion = Conecta()
+# coneccion = Conecta()
 
-while (True):
-    reinas = input("Numero de reinas ")
-    print(coneccion.query(reinas))
+# while (True):
+#     reinas = input("Numero de reinas ")
+#     print(coneccion.query(reinas))
